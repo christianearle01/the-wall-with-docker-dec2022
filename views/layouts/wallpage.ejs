@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Wall</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+<body>
+    <div>
+        <p>
+            Welcome <%= first_name %>
+            <span><a href="/logout">Logout</a></span>
+        </p>
+
+        <ul>
+            <form id="create_message" action="/api/wall/create_message" method="post">
+                <textarea name="content"></textarea>
+                <input type="submit" value="Post a Message">
+            </form>
+
+            <div>
+                <% for(let index = 0; index < messages_data?.length; index++){ 
+                    let comments = JSON.parse(messages_data[index].comments);
+                %>
+                    <li>
+                        <p>
+                            <%= messages_data[index].name %> (<%= messages_data[index].created_at %>) 
+                            <a class="delete_message" href="/api/wall/delete_message/<%= messages_data[index].id %>">X</a>
+                        </p>
+                        <span><%= messages_data[index].content %></span>
+
+                        <ul>
+                            <% for(let ctr = 0; ctr < comments.length; ctr++){ %>
+                                <li>
+                                    <p>
+                                        <%= comments[ctr].name %> (<%= comments[ctr].created_at %>) 
+                                        <a class="delete_comment" href="/api/wall/delete_comment/<%= comments[ctr].id %>">X</a>
+                                    </p>
+                                    <span><%= comments[ctr].content %></span>
+                                </li>
+                            <% } %>
+                        </ul>
+
+                        <form class="create_comment" action="/api/wall/create_comment" method="post">
+                            <input type="hidden" name="message_id" value="<%= messages_data[index].id %>">
+                            <textarea name="content"></textarea>
+                            <input type="submit" value="Post a Comment">
+                        </form>
+                    </li>
+                <% } %>
+            </div>
+        </ul>
+    </div>
+    <script src="/assets/javascript/index.js"></script>
+</body>
+</html>
