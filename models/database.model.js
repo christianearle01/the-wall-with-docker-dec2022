@@ -1,5 +1,5 @@
 
-const Mysql = require('mysql')
+const Mysql = require('mysql2')
 
 const { DATABASE } = require('../config/constants');
 

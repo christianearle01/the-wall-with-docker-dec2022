@@ -1,4 +1,4 @@
-const Mysql = require('mysql');
+const Mysql = require('mysql2');
 
 const { passwordEncryption, passwordIsValid } = require('../helpers/index.helper');
 
@@ -80,6 +80,7 @@ class UsersModel extends DatabaseModel {
             response_data = await this.executeQuery(fetch_user_query);
         }
         catch(error){
+            console.log(error);
             response_data.error = error;
             response_data.message = "Failed to fetch user by email.";
         }
